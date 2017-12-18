@@ -3,35 +3,29 @@ package com.max.ijkcmake.player;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
-import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.max.ijkcmake.R;
 
+import tv.danmaku.ijk.media.player.IMediaPlayer;
+import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 import tv.danmaku.ijk.media.player.widget.media.SurfaceRenderView;
 
 
-public class ijkUseMainActivity extends Activity implements MediaPlayer.OnPreparedListener{
+public class ijkUseMainActivity extends Activity implements IjkMediaPlayer.OnPreparedListener{
 
-    private MediaPlayer ijkMediaPlayer;
+    private IjkMediaPlayer ijkMediaPlayer;
     private EditText filePath;
     private SurfaceRenderView surfaceView;
-    private SurfaceHolder holder;
     private static final String TAG = "ijkUseMainActivity";
     private static final int PERMISSION_CODE = 0x101;
     private boolean initial = false;
-    private boolean audioReady = false;
-    private boolean videoReady = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +34,9 @@ public class ijkUseMainActivity extends Activity implements MediaPlayer.OnPrepar
 
         filePath = findViewById(R.id.file_path);
         surfaceView = (SurfaceRenderView) findViewById(R.id.video_show);
-        holder = surfaceView.getHolder();
 
-        ijkMediaPlayer = new MediaPlayer();
+        ijkMediaPlayer = new IjkMediaPlayer();
+        ijkMediaPlayer.native_setLogLevel(IjkMediaPlayer.IJK_LOG_DEBUG);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
@@ -92,7 +86,7 @@ public class ijkUseMainActivity extends Activity implements MediaPlayer.OnPrepar
     }
 
     @Override
-    public void onPrepared(MediaPlayer mp) {
+    public void onPrepared(IMediaPlayer mp) {
         mp.start();
     }
 }
