@@ -3,27 +3,29 @@ package com.max.ijkcmake.player;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.max.ijkcmake.R;
 
-import tv.danmaku.ijk.media.player.IMediaPlayer;
-import tv.danmaku.ijk.media.player.IjkMediaPlayer;
+import tv.danmaku.ijk.media.player.widget.media.SurfaceRenderView;
 
 
-public class ijkUseMainActivity extends Activity implements IMediaPlayer.OnPreparedListener, IMediaPlayer.OnVideoSizeChangedListener{
+public class ijkUseMainActivity extends Activity implements MediaPlayer.OnPreparedListener{
 
-    private IjkMediaPlayer ijkMediaPlayer;
+    private MediaPlayer ijkMediaPlayer;
     private EditText filePath;
-    private SurfaceView surfaceView;
+    private SurfaceRenderView surfaceView;
     private SurfaceHolder holder;
     private static final String TAG = "ijkUseMainActivity";
     private static final int PERMISSION_CODE = 0x101;
@@ -37,10 +39,10 @@ public class ijkUseMainActivity extends Activity implements IMediaPlayer.OnPrepa
         setContentView(R.layout.activity_ijk_use_main);
 
         filePath = findViewById(R.id.file_path);
-        surfaceView = (SurfaceView) findViewById(R.id.video_show);
+        surfaceView = (SurfaceRenderView) findViewById(R.id.video_show);
         holder = surfaceView.getHolder();
 
-        ijkMediaPlayer = new IjkMediaPlayer();
+        ijkMediaPlayer = new MediaPlayer();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
@@ -81,7 +83,6 @@ public class ijkUseMainActivity extends Activity implements IMediaPlayer.OnPrepa
             ijkMediaPlayer.setDataSource(file);
             ijkMediaPlayer.setDisplay(surfaceView.getHolder());
             ijkMediaPlayer.prepareAsync();
-            ijkMediaPlayer.setOnVideoSizeChangedListener(this);
             ijkMediaPlayer.setOnPreparedListener(this);
         }catch (Exception e){
             Log.d(TAG, "set data source failed. ");
@@ -91,20 +92,7 @@ public class ijkUseMainActivity extends Activity implements IMediaPlayer.OnPrepa
     }
 
     @Override
-    public void onPrepared(IMediaPlayer mp) {
-        Log.d(TAG, "on Prepared, play. ");
-
-        audioReady = true;
-        if (audioReady && videoReady){
-            mp.start();
-        }
-    }
-
-    @Override
-    public void onVideoSizeChanged(IMediaPlayer mp, int width, int height, int sar_num, int sar_den) {
-        videoReady = true;
-        if (audioReady && videoReady){
-            mp.start();
-        }
+    public void onPrepared(MediaPlayer mp) {
+        mp.start();
     }
 }

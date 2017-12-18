@@ -10,7 +10,7 @@
         android:id="@+id/file_path"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="/sdcard/test.mp3"/>
+        android:text="/sdcard/test1.mp4"/>
 
     <Button
         android:id="@+id/btn_play"
@@ -19,7 +19,7 @@
         android:text="start"
         android:onClick="btnClick"/>
 
-    <SurfaceView
+    <tv.danmaku.ijk.media.player.widget.media.SurfaceRenderView
         android:id="@+id/video_show"
         android:layout_width="match_parent"
         android:layout_height="300dp" />
